@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import axios from "axios";
+
 import { IoIosArrowDropupCircle } from "react-icons/io";
 
 function PromptCard() {
@@ -12,12 +14,33 @@ function PromptCard() {
     }
 
     setLoading(true);
-    // Simulate a network request
-    setTimeout(() => {
-      // Replace this with your actual API call
-      setOutput(`Output for: ${input}`);
+    try {
+      const response = await axios.post(
+        "https://api.openai.com/v1/completions",
+        {
+          model: "text-davinci-003",
+          prompt: `Create a 5-line bio with emojis for someone who is a ${input}. The bio should be creative and inspirational. Here are some examples:
+          1. 🌐 syedahmedraza.com 💻 Web developer 🚀 Aiming for Billionaire 📚 Always Learning & Growing 💡 Exploring New Frontiers in Tech, Business & Innovation
+          2. 🎨 Creative Designer 🌟 Passionate About Art 🖼️ Bringing Ideas to Life 🌍 Changing the World One Design at a Time 💪 Ready for New Challenges
+          3. 💼 Business Strategist 📈 Driving Growth & Innovation 🌟 Leading with Vision 🚀 Transforming Ideas into Success 💡 Inspiring Future Leaders`,
+          max_tokens: 100,
+          temperature: 0.7,
+        },
+        {
+          headers: {
+            Authorization: `Bearer `,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setOutput(response.data.choices[0].text.trim());
+    } catch (error) {
+      console.error("Error generating bio:", error);
+      setOutput("Sorry, something went wrong.");
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
 
   return (
