@@ -1,9 +1,10 @@
-import './App.css';
+import "./App.css";
+import PromptCard from "./Components/PromptCard";
 
 function App() {
   return (
-    <div className="App">
-      AI BIO Generator
+    <div className="bg-gray-900 flex items-center justify-center h-screen">
+      <PromptCard />
     </div>
   );
 }
